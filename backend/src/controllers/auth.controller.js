@@ -109,8 +109,8 @@ export const updateProfile = async (req, res) => {
         const updatedUser = await User.findByIdAndUpdate(userId,
              { profilePic: uploadResponse.secure_url },
               { new: true }
-            );
-            res.status(200).json(updateUser)
+            ).select("-password");
+            res.status(200).json(updatedUser)
     } catch (error) {
         console.log("Error in updating profile:", error);
         res.status(500).json({message:"Internal server error."})
