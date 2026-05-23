@@ -106,3 +106,22 @@ export const getChatPartners = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const clearChat = async (req, res) => {
+  try {
+    const myId = req.user._id;
+    const { id: userToChatId } = req.params;
+
+    const deleteResult = await Message.deleteMany({
+      $or: [
+        { senderId: myId, receiverId: userToChatId },
+        { senderId: userToChatId, receiverId: myId },
+      ],
+    });
+
+    res.status(200).json({ deletedCount: deleteResult.deletedCount });
+  } catch (error) {
+    console.log("Error in clearChat controller: ", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

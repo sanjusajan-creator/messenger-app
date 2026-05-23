@@ -56,6 +56,17 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
+  clearChatByUserId: async (userId) => {
+    if (!userId) return;
+    try {
+      await axiosInstance.delete(`/messages/clear/${userId}`);
+      set({ messages: [] });
+      toast.success("Chat cleared");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to clear chat");
+    }
+  },
+
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
     const { authUser } = useAuthStore.getState();
@@ -89,12 +100,17 @@ export const useChatStore = create((set, get) => ({
     if (!selectedUser) return;
 
     const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+
+    // prevent duplicate listeners when multiple components mount
+    socket.off("newMessage");
 
     socket.on("newMessage", (newMessage) => {
       const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
       if (!isMessageSentFromSelectedUser) return;
 
       const currentMessages = get().messages;
+      if (currentMessages.some((msg) => msg._id === newMessage._id)) return;
       set({ messages: [...currentMessages, newMessage] });
 
       if (isSoundEnabled) {
