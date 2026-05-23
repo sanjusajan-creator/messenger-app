@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --app-height: 100vh;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  min-height: 100svh;
+}
+
+.app-shell {
+  min-height: var(--app-height);
+}
+
 @property --border-angle {
   inherits: false;
   initial-value: 0deg;

@@ -6,7 +6,7 @@ import NoChatHistoryPlaceholder from "./NoChatHistoryPlaceholder";
 import MessageInput from "./MessageInput";
 import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
 
-function ChatContainer() {
+function ChatContainer({ onBack }) {
   const {
     selectedUser,
     getMessagesByUserId,
@@ -38,7 +38,7 @@ function ChatContainer() {
 
   return (
     <div className="flex-1 min-h-0 flex flex-col">
-      <ChatHeader />
+      <ChatHeader onBack={onBack} />
       <div className="flex-1 min-h-0 px-6 overflow-y-auto py-6 md:py-8">
         {messages.length > 0 && !isMessagesLoading ? (
           <div className="max-w-3xl mx-auto space-y-6">
@@ -51,7 +51,7 @@ function ChatContainer() {
                   className={`chat-bubble relative ${
                     msg.senderId === authUser._id
                       ? "bg-cyan-600 text-white"
-                      : "bg-slate-800 text-slate-200"
+                      : "bg-slate-700 text-slate-100"
                   }`}
                 >
                   {msg.image && (
