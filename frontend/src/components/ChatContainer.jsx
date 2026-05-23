@@ -19,6 +19,8 @@ function ChatContainer() {
   const messageEndRef = useRef(null);
 
   useEffect(() => {
+    if (!selectedUser?._id) return undefined;
+
     getMessagesByUserId(selectedUser._id);
     subscribeToMessages();
 
@@ -32,10 +34,12 @@ function ChatContainer() {
     }
   }, [messages]);
 
+  if (!selectedUser) return null;
+
   return (
-    <>
+    <div className="flex-1 min-h-0 flex flex-col">
       <ChatHeader />
-      <div className="flex-1 px-6 overflow-y-auto py-8">
+      <div className="flex-1 min-h-0 px-6 overflow-y-auto py-6 md:py-8">
         {messages.length > 0 && !isMessagesLoading ? (
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((msg) => (
@@ -74,7 +78,7 @@ function ChatContainer() {
       </div>
 
       <MessageInput />
-    </>
+    </div>
   );
 }
 
