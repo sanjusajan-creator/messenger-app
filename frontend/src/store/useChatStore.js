@@ -18,7 +18,7 @@ export const useChatStore = create((set, get) => ({
         set({isSoundEnabled: !get().isSoundEnabled})
     },
     setActiveTab: (tab) => set({ activeTab: tab }),
-    setSelectedUser: (user) => set({ selectedUser }),
+    setSelectedUser: (user) => set({ selectedUser: user }),
 
     getAllContacts: async () => {
         set({ isUsersLoading: true });
@@ -31,7 +31,7 @@ export const useChatStore = create((set, get) => ({
             set({ isUsersLoading: false });
         }
     },
-    getMyChatPartenrs: async () => {
+    getMyChatPartners: async () => {
          set({ isUsersLoading: true });
         try {
             const res = await axiosInstance.get("/messages/chats");
